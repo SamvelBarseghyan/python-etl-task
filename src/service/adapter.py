@@ -1,15 +1,15 @@
-import os
 import json
+import logging
+
 import requests
+from src.exception import *
 from typing import List, Dict
 from functools import lru_cache
+from src.logger import settings
 from src.entity import PlayerInfo
-from src.config import config_by_name
 from src.dto import QueryParams, ResponseContent
-from src.exception import *
 
-config_type = os.getenv("CONFIG_TYPE", "dev")
-settings = config_by_name[config_type]()
+log = logging.getLogger(__name__)
 
 
 class DataManipulation:
@@ -52,6 +52,9 @@ class DataManipulation:
             :exception EmptyRecentMatchesException:
                 if current user don't have recent matches
         """
+        log.info(f"To get list of recent matches of the player: {account_id} "
+                 f"will be used API: "
+                 f"{settings.recent_matches_api.format(account_id)}")
         recent_matches_api_response = requests.get(
             settings.recent_matches_api.format(account_id)
         )
@@ -60,7 +63,9 @@ class DataManipulation:
         if not recent_matches:
             err_msg = f"Matches for account: {account_id} not found."
             raise EmptyRecentMatchesException(err_msg, account_id)
-
+        log.info(f"Data about recent matches of the player: {account_id} "
+                 f"was successfully parsed.")
+        log.debug(recent_matches)
         return recent_matches
 
     def get_player_info(self, query_params: QueryParams) -> PlayerInfo:
@@ -75,6 +80,9 @@ class DataManipulation:
         """
         recent_matches = self.get_recent_matches(query_params.account_id)
         if query_params.count > len(recent_matches):
+            log.info("Count of the recent matches requested by client "
+                     "for which KDA/KP should be calculated was changed "
+                     "because user's total game count less than requested one")
             query_params.count = len(recent_matches)
         recent_matches_info = list(
             map(
@@ -102,12 +110,16 @@ class DataManipulation:
             :exception: MissingMatchInfoException:
                 if data for the match not found/is empty
         """
+        log.info(f"To get match info for match: {match_id} will be used API:"
+                 f"{settings.match_info_api.format(match_id)}")
+
         match_info_api_response = requests.get(
             settings.match_info_api.format(match_id)
         )
         detailed_match_info = json.loads(match_info_api_response.content)
         if not detailed_match_info:
-            err_msg = ""
+            err_msg = f"Missing: {match_id} not found."
             raise MissingMatchInfoException(err_msg, match_id)
-
+        log.info(f"Match info for match: {match_id} was successfully parsed.")
+        log.debug(detailed_match_info)
         return detailed_match_info

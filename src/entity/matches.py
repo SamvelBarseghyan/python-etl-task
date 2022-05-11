@@ -1,6 +1,9 @@
+import logging
 from statistics import mean
 from typing import Union, Tuple, List, Dict
 from src.exception import MissingPlayerInfoException, MissingKeyError
+
+log = logging.getLogger(__name__)
 
 
 class Match:
@@ -40,6 +43,8 @@ class Match:
                                                        self.is_radiant)
             self.kda: float = self.get_kda()
             self.kp: float = self.get_kp()
+            log.info(f"KPI was calculated for match: {self.match_id}")
+            log.debug(self.__dict__)
         except KeyError as err:
             err_msg = f"Match: {self.match_id} doesn't contain property " \
                       f"\"{err.args[0]}\" for computing the KPI."
@@ -115,6 +120,8 @@ class RecentMatches:
             self.get_min_avg_max_of_list(True)
         self.min_kp, self.avg_kp, self.max_kp = \
             self.get_min_avg_max_of_list(False)
+        log.info(f"Data about {len(recent_matches)} was successfully parsed.")
+        log.debug(self.__dict__)
 
     def get_min_avg_max_of_list(self, is_kda_list: bool = False) \
             -> Union[Tuple[float], Tuple[str]]:

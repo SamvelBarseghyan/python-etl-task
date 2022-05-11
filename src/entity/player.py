@@ -1,5 +1,8 @@
+import logging
 from typing import List, Dict
 from .matches import RecentMatches
+
+log = logging.getLogger(__name__)
 
 
 class PlayerInfo:
@@ -21,3 +24,5 @@ class PlayerInfo:
         self.name = name
         self.recent_matches = RecentMatches(recent_matches, account_id)
         self.total_games = total_games
+        log.info("Info about the player successfully parsed/calculated.")
+        log.debug(self.__dict__)
