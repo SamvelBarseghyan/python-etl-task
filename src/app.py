@@ -54,13 +54,21 @@ def exception_handler(request: Request, err: Exception):
             },
         )
 
-    return JSONResponse(
+    if isinstance(err, ConnectionError):
+        return JSONResponse(
             status_code=500,
             content={
                 "message": "Internal Server Error",
-                "detailed_message": traceback.format_exc()
+                "detailed_message": err.args[0].args[0]
             },
         )
+    return JSONResponse(
+        status_code=500,
+        content={
+            "message": "Internal Server Error",
+            "detailed_message": traceback.format_exc()
+        },
+    )
 
 
 if __name__ == '__main__':
