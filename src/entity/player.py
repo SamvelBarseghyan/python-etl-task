@@ -7,10 +7,15 @@ class PlayerInfo:
                  recent_matches: List[Dict], total_games: int):
         """
         Constructor of the class: PlayerInfo
-        :param account_id:
-        :param name:
-        :param recent_matches:
-        :param total_games:
+        :type account_id: int
+        :param account_id: Account ID of the player
+        :type name: str
+        :param name: Name of the player
+        :type recent_matches: RecentMatches
+        :param recent_matches: Object that has all the data of recent
+                                matches of the player
+        :type total_games: int
+        :param total_games: count of the matches that player was played
         """
         self.account_id = account_id
         self.name = name

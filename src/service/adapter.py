@@ -15,6 +15,14 @@ settings = config_by_name[config_type]()
 class DataManipulation:
 
     def __call__(self, query_params: QueryParams) -> ResponseContent:
+        """
+        Function prepares response
+        :type query_params: QueryParams
+        :param query_params: query parameters from request
+        :rtype: ResponseContent
+        :return: Returns object that contains all the data
+                    needed to construct response
+        """
         player_info = self.get_player_info(query_params)
         response = ResponseContent(
             player_name=player_info.name,
@@ -51,7 +59,7 @@ class DataManipulation:
         recent_matches = json.loads(recent_matches_api_response.content)
         if not recent_matches:
             err_msg = f"Matches for account: {account_id} not found."
-            raise EmptyRecentMatchesException(err_msg)
+            raise EmptyRecentMatchesException(err_msg, account_id)
 
         return recent_matches
 
@@ -59,11 +67,11 @@ class DataManipulation:
         """
         Function will parse list with recent matches info and
             will create PlayerInfo object that will have all
-            needed data about matches
+            needed data about matches, calculated KDA/KP
         :type query_params: QueryParams
         :param query_params:
         :rtype: PlayerInfo
-        :return:
+        :return: Returns object of PlayerInfo with all needed/calculated data
         """
         recent_matches = self.get_recent_matches(query_params.account_id)
         if query_params.count > len(recent_matches):
@@ -87,9 +95,12 @@ class DataManipulation:
         """
 
         :type match_id: int
-        :param match_id:
+        :param match_id: id of the match for which need to get detailed date
         :rtype: Dict
-        :return:
+        :return: Detailed data of the match
+        :raises:
+            :exception: MissingMatchInfoException:
+                if data for the match not found/is empty
         """
         match_info_api_response = requests.get(
             settings.match_info_api.format(match_id)

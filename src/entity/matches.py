@@ -121,9 +121,10 @@ class RecentMatches:
         """
         Function returns MIN, AVG and MAX values of the KDA/KP of matches
         :type is_kda_list: bool
-        :param is_kda_list:
+        :param is_kda_list: to check if should be calculated min/max/mean of
+                            kda then return float else str
         :rtype: Union[Tuple[float], Tuple[str]]
-        :return:
+        :return: Tuble from calculated min/avg/max of kda/kp
         """
         kpi_type = "kda" if is_kda_list else "kp"
         list_of_kpi_values = [

@@ -4,7 +4,7 @@ from dataclasses import dataclass
 @dataclass()
 class EmptyRecentMatchesException(Exception):
     message: str
-    account_id: str
+    account_id: int
 
 
 @dataclass()
