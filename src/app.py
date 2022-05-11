@@ -1,10 +1,11 @@
 import io
 import yaml
 import functools
+import traceback
+from src.exception import *
+from fastapi import FastAPI, Request
 from controller.controller import router
-from fastapi import FastAPI, HTTPException
-from fastapi.responses import Response
-
+from fastapi.responses import Response, JSONResponse
 
 app = FastAPI(
     title="ETL Project",
@@ -23,6 +24,43 @@ def read_openapi_yaml() -> Response:
     yaml_s = io.StringIO()
     yaml.dump(openapi_json, yaml_s)
     return Response(yaml_s.getvalue(), media_type='text/yaml')
+
+
+@app.exception_handler(Exception)
+def exception_handler(request: Request, err: Exception):
+    if isinstance(err, EmptyRecentMatchesException):
+        return JSONResponse(
+            status_code=403,
+            content={
+                "message": err.message,
+                "account_id": err.account_id
+            }
+        )
+    if isinstance(err, MissingPlayerInfoException):
+        return JSONResponse(
+            status_code=400,
+            content={
+                "message": err.message,
+                "account_id": err.account_id,
+                "match_id": err.match_id
+            },
+        )
+    if isinstance(err, MissingKeyError):
+        return JSONResponse(
+            status_code=510,
+            content={
+                "message": err.message,
+                "missing_field": err.missing_field
+            },
+        )
+
+    return JSONResponse(
+            status_code=500,
+            content={
+                "message": "Internal Server Error",
+                "detailed_message": traceback.format_exc()
+            },
+        )
 
 
 if __name__ == '__main__':

@@ -5,8 +5,8 @@ from typing import List, Dict
 from functools import lru_cache
 from src.entity import PlayerInfo
 from src.config import config_by_name
-from src.dto import QueryParams, ResponseModel
-from src.exception import EmptyRecentMatchesException
+from src.dto import QueryParams, ResponseContent
+from src.exception import *
 
 config_type = os.getenv("CONFIG_TYPE", "dev")
 settings = config_by_name[config_type]()
@@ -14,9 +14,9 @@ settings = config_by_name[config_type]()
 
 class DataManipulation:
 
-    def __call__(self, query_params: QueryParams) -> ResponseModel:
+    def __call__(self, query_params: QueryParams) -> ResponseContent:
         player_info = self.get_player_info(query_params)
-        response = ResponseModel(
+        response = ResponseContent(
             player_name=player_info.name,
             total_games=player_info.total_games,
             min_kda=player_info.recent_matches.min_kda,
@@ -81,8 +81,6 @@ class DataManipulation:
             len(recent_matches)
         )
 
-
-
     @staticmethod
     @lru_cache(maxsize=10)
     def get_match_detailed_info(match_id: int) -> Dict:
@@ -99,6 +97,6 @@ class DataManipulation:
         detailed_match_info = json.loads(match_info_api_response.content)
         if not detailed_match_info:
             err_msg = ""
-            raise Exception(err_msg)
+            raise MissingMatchInfoException(err_msg, match_id)
 
         return detailed_match_info

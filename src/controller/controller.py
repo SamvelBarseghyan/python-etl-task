@@ -1,26 +1,19 @@
 import logging
-
+from typing import Union
 from fastapi import APIRouter
 from src.service import DataManipulation
-from src.dto import QueryParams, ResponseModel
-from src.exception import EmptyRecentMatchesException
+from fastapi.responses import JSONResponse
+from src.dto import QueryParams, ResponseContent
 
 router = APIRouter()
 
 
-@router.get('/players', response_model=ResponseModel, tags=["players"])
+@router.get(
+    '/players',
+    tags=["players"]
+)
 def get_kpis(account_id: int, name: str, count: int = 10):
     query_params = QueryParams(account_id, name, count)
-    try:
-        service = DataManipulation()
-        return service(query_params)
-    except EmptyRecentMatchesException as err:
-        return {
-            "code": 500,
-            "message": err.message
-        }
-    except Exception as err:
-        return {
-            "code": 500,
-            "message": "Internal Error"
-        }
+    service = DataManipulation()
+    response = service(query_params)
+    return response

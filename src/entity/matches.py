@@ -1,6 +1,6 @@
 from statistics import mean
 from typing import Union, Tuple, List, Dict
-from src.exception import EmptyPlayerInfoException
+from src.exception import MissingPlayerInfoException, MissingKeyError
 
 
 class Match:
@@ -12,33 +12,38 @@ class Match:
         :type account_id: int
         :param account_id: Account ID of the player
         :raises:
-            :exception EmptyPlayerInfoException:
+            :exception MissingPlayerInfoException:
                 if player's account id not found in the
                 list of players of current match
         """
-        self.match_id: int = match_info["match_id"]
 
-        players_info = self.get_player_info(match_info)
-        curr_player = dict()
-        for player in players_info:
-            if account_id == player.get("account_id"):
-                curr_player = player
-                break
-        if not curr_player:
-            err_msg = f"Player: {account_id} not found in the list of " \
-                      f"players of match {self.match_id}."
-            raise EmptyPlayerInfoException(
-                message=err_msg, account_id=account_id
-            )
-        self.assists: int = curr_player.get("assists", 0)
-        self.deaths: int = curr_player.get("deaths") if curr_player.get(
-            "deaths") else 1
-        self.kills: int = curr_player.get("kills", 1)
-        self.is_radiant: bool = curr_player.get("isRadiant")
-        self.team_kills: int = self.get_team_kills(players_info,
-                                                   self.is_radiant)
-        self.kda: float = self.get_kda()
-        self.kp: float = self.get_kp()
+        self.match_id: int = match_info["match_id"]
+        try:
+            players_info = self.get_player_info(match_info)
+            curr_player = dict()
+            for player in players_info:
+                if account_id == player.get("account_id"):
+                    curr_player = player
+                    break
+            if not curr_player:
+                err_msg = f"Player: {account_id} not found in the list of " \
+                          f"players of match {self.match_id}"
+                raise MissingPlayerInfoException(
+                    message=err_msg, account_id=account_id, match_id=self.match_id
+                )
+            self.assists: int = curr_player["assists"]
+            self.deaths: int = curr_player["deaths"] if curr_player["deaths"]\
+                else 1
+            self.kills: int = curr_player["kills"]
+            self.is_radiant: bool = curr_player["isRadiant"]
+            self.team_kills: int = self.get_team_kills(players_info,
+                                                       self.is_radiant)
+            self.kda: float = self.get_kda()
+            self.kp: float = self.get_kp()
+        except KeyError as err:
+            err_msg = f"Match: {self.match_id} doesn't contain property " \
+                      f"\"{err.args[0]}\" for computing the KPI."
+            raise MissingKeyError(err_msg, err.args[0])
 
     @staticmethod
     def get_player_info(match_info: Dict) -> List[Dict]:

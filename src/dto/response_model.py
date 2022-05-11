@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 
 
-class ResponseModel(BaseModel):
+class ResponseContent(BaseModel):
     """
     Class/Model that represent structure of the response of the API call
     """
