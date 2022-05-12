@@ -79,7 +79,7 @@ class Match:
         for player_info in match_data:
             if player_info["isRadiant"] == is_radiant:
                 team_kills += player_info["kills"]
-        return team_kills if team_kills else 1
+        return team_kills
 
     def get_kda(self) -> float:
         """
