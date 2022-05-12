@@ -1,3 +1,4 @@
+import os
 from pydantic import BaseSettings
 
 
@@ -34,3 +35,6 @@ config_by_name = dict(
     test=TestingSettings,
     prod=ProductionSettings
 )
+
+config_type = os.getenv("CONFIG_TYPE", "dev")
+settings = config_by_name[config_type]()

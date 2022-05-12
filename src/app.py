@@ -38,7 +38,7 @@ def exception_handler(request: Request, err: Exception):
 
     if isinstance(err, EmptyRecentMatchesException):
         return JSONResponse(
-            status_code=403,
+            status_code=404,
             content={
                 "message": err.message,
                 "account_id": err.account_id
@@ -46,7 +46,7 @@ def exception_handler(request: Request, err: Exception):
         )
     if isinstance(err, MissingPlayerInfoException):
         return JSONResponse(
-            status_code=400,
+            status_code=404,
             content={
                 "message": err.message,
                 "account_id": err.account_id,
@@ -55,7 +55,7 @@ def exception_handler(request: Request, err: Exception):
         )
     if isinstance(err, MissingKeyError):
         return JSONResponse(
-            status_code=510,
+            status_code=404,
             content={
                 "message": err.message,
                 "missing_field": err.missing_field

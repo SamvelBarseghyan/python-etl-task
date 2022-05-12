@@ -25,7 +25,7 @@ class Match:
             players_info = self.get_player_info(match_info)
             curr_player = dict()
             for player in players_info:
-                if account_id == player.get("account_id"):
+                if account_id == player["account_id"]:
                     curr_player = player
                     break
             if not curr_player:
@@ -78,8 +78,8 @@ class Match:
         team_kills = 0
         for player_info in match_data:
             if player_info["isRadiant"] == is_radiant:
-                team_kills += player_info.get("kills", 0)
-        return team_kills
+                team_kills += player_info["kills"]
+        return team_kills if team_kills else 1
 
     def get_kda(self) -> float:
         """
@@ -99,6 +99,8 @@ class Match:
         :rtype: float
         :return: KP
         """
+        if self.team_kills == 0:
+            return 0
         kp = (self.kills + self.assists) * 100 / self.team_kills
         return round(kp, 2)
 

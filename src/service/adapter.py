@@ -1,11 +1,10 @@
 import json
 import logging
-
 import requests
 from exception import *
+from config import settings
 from typing import List, Dict
 from functools import lru_cache
-from logger import settings
 from entity import PlayerInfo
 from dto import QueryParams, ResponseContent
 
