@@ -1,7 +1,7 @@
 import logging
 from fastapi import APIRouter
-from src.dto import QueryParams
-from src.service import DataManipulation
+from dto import QueryParams
+from service import DataManipulation
 from fastapi.responses import JSONResponse
 
 router = APIRouter()

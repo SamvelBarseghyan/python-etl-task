@@ -4,7 +4,7 @@ import logger
 import logging
 import functools
 import traceback
-from src.exception import *
+from exception import *
 from fastapi import FastAPI, Request
 from controller.controller import router
 from fastapi.responses import Response, JSONResponse
@@ -31,7 +31,7 @@ def read_openapi_yaml() -> Response:
 
 
 @app.exception_handler(Exception)
-def exception_handler(err: Exception):
+def exception_handler(request: Request, err: Exception):
 
     log.error("An exception was thrown during the calculation of KPI.")
     log.error(err)
@@ -69,8 +69,3 @@ def exception_handler(err: Exception):
             "detailed_message": traceback.format_exc()
         },
     )
-
-
-if __name__ == '__main__':
-    import uvicorn
-    uvicorn.run(app)

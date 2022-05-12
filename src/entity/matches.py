@@ -1,7 +1,7 @@
 import logging
 from statistics import mean
 from typing import Union, Tuple, List, Dict
-from src.exception import MissingPlayerInfoException, MissingKeyError
+from exception import MissingPlayerInfoException, MissingKeyError
 
 log = logging.getLogger(__name__)
 
