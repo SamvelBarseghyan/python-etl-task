@@ -1,12 +1,12 @@
 import json
 import logging
 import requests
-from exception import *
-from config import settings
+from src.exception import *
+from src.config import settings
 from typing import List, Dict
 from functools import lru_cache
-from entity import PlayerInfo
-from dto import QueryParams, ResponseContent
+from src.entity import PlayerInfo
+from src.dto import QueryParams, ResponseContent
 
 log = logging.getLogger(__name__)
 
