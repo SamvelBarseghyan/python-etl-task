@@ -2,7 +2,7 @@ FROM python:3.9
 # requirments
 # create the app user
 
-WORKDIR /src
+WORKDIR /
 
 # https://docs.python.org/3/using/cmdline.html#envvar-PYTHONDONTWRITEBYTECODE
 # Prevents Python from writing .pyc files to disk
@@ -16,7 +16,8 @@ ENV CONFIG_TYPE prod
 ENV TESTING false
 
 # Copy app source codes
-COPY ./src/ ./
+COPY src/ ./src/
+COPY requirements.txt ./requirements.txt
 
 # Install python packages using requirements.txt file
 RUN pip3 install --no-cache-dir --upgrade pip && \
@@ -26,4 +27,4 @@ ENV PYTHONPATH=/src
 EXPOSE 80/tcp
 
 # Start Uvicorn
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "80"]
+CMD ["uvicorn", "src.app:app", "--host", "0.0.0.0", "--port", "80"]
