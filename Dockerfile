@@ -23,6 +23,7 @@ RUN pip3 install --no-cache-dir --upgrade pip && \
     pip3 install --no-cache-dir -r requirements.txt
 
 ENV PYTHONPATH=/src
+EXPOSE 80/tcp
 
 # Start Uvicorn
-CMD ["uvicorn", "app:app", "--host 0.0.0.0", "--port 80"]
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "80"]
