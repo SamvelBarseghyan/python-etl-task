@@ -27,4 +27,4 @@ ENV PYTHONPATH=/src
 EXPOSE 80/tcp
 
 # Start Uvicorn
-CMD ["uvicorn", "src.app:app", "--host", "0.0.0.0", "--port", "80"]
+CMD ["uvicorn", "src.app:app", "--host", "127.0.0.1", "--port", "80"]
