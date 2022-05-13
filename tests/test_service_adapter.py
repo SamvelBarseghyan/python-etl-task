@@ -31,28 +31,6 @@ detailed_match_info = {
     ]
 }
 
-detailed_match_info_missing = {
-    "match_id": 6467715185,
-    "players": [
-        {
-            "match_id": 6467715185,
-            "account_id": 318351912,
-            "assists": 25,
-            "deaths": 7,
-            "kills": 4,
-            "isRadiant": True
-        },
-        {
-            "match_id": 6467715185,
-            "account_id": 6467715185,
-            "assists": 7,
-            "deaths": 5,
-            "kills": 8,
-            "isRadiant": True
-        }
-    ]
-}
-
 recent_matches_info = [
     {
         "match_id": 6467715185,
@@ -101,13 +79,6 @@ def mocked_requests_get_none(*args, **kwargs):
     response = Response()
     response.status_code = 200
     response._content = str.encode(json.dumps(None))
-    return response
-
-
-def mocked_requests_get_missing(*args, **kwargs):
-    response = Response()
-    response.status_code = 200
-    response._content = str.encode(json.dumps(detailed_match_info_missing))
     return response
 
 
