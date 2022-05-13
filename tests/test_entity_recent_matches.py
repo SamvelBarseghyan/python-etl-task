@@ -4,7 +4,6 @@ from unittest.mock import patch
 from src.entity.matches import RecentMatches, Match
 
 
-
 class TestRecentMatches(unittest.TestCase):
     def setUp(self) -> None:
         self.account_id = 318351912

@@ -9,6 +9,7 @@ class DevelopmentSettings(BaseSettings):
     log_format: str = "%(asctime)s:%(levelname)s:%(filename)s:%(funcName)s" \
                       ":%(message)s"
     debug: bool = True
+    cache_size: int = 10
 
 
 class TestingSettings(BaseSettings):
@@ -17,7 +18,7 @@ class TestingSettings(BaseSettings):
     match_info_api: str = "https://api.opendota.com/api/matches/{}"
     log_format: str = "%(asctime)s:%(levelname)s:%(filename)s:%(funcName)s" \
                       ":%(message)s"
-    testing: bool = True
+    cache_size: int = 0
     debug: bool = True
 
 
@@ -28,6 +29,7 @@ class ProductionSettings(BaseSettings):
     log_format: str = "%(asctime)s:%(levelname)s:%(filename)s:%(funcName)s" \
                       ":%(message)s"
     debug: bool = False
+    cache_size: int = 10
 
 
 config_by_name = dict(

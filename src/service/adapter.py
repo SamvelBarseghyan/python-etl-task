@@ -1,9 +1,10 @@
+import sys
 import json
 import logging
 import requests
 from src.exception import *
-from src.config import settings
 from typing import List, Dict
+from src.config import settings
 from functools import lru_cache
 from src.entity import PlayerInfo
 from src.dto import QueryParams, ResponseContent
@@ -36,7 +37,7 @@ class DataManipulation:
         return response
 
     @staticmethod
-    @lru_cache(maxsize=10)
+    @lru_cache(maxsize=settings.cache_size)
     def get_recent_matches(account_id: int) -> List[Dict]:
         """
         Function get list of the recent matches for account id sent
@@ -97,7 +98,7 @@ class DataManipulation:
         )
 
     @staticmethod
-    @lru_cache(maxsize=10)
+    @lru_cache(maxsize=settings.cache_size)
     def get_match_detailed_info(match_id: int) -> Dict:
         """
 
