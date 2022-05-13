@@ -22,11 +22,11 @@ docker run -dp 80:80 etl-app
 
 ## HOW TO USE THE APPLICATION
 
-Click [http://0.0.0.0:80/docs](http://0.0.0.0:80/docs) to navigate to the application Swagger page
+Click [http://127.0.0.1:80/docs](http://127.0.0.1:80/docs) to navigate to the application Swagger page
 Or you can run
 ```bash
 # To call app to get KPIs of the player
-$ curl --location --request GET 'http://0.0.0.0:80/players?account_id=639740&name=YrikGood'
+$ curl --location --request GET 'http://127.0.0.1:80/players?account_id=639740&name=YrikGood'
 {
     "player_name": "YrikGood",
     "total_games": 20,
